@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import Input from "../../components/Input";
 import validateRegister from "../../validators/validate-register";
 import * as authApi from "../../apis/auth-api";
+import useLoading from '../../hooks/useLoading';
 
 const initialInput = {
   firstName: "",
@@ -11,9 +13,11 @@ const initialInput = {
   confirmPassword: "",
 };
 
-export default function RegisterForm() {
+export default function RegisterForm({ onClose }) {
   const [input, setInput] = useState(initialInput);
   const [error, setError] = useState({});
+
+  const { startLoading, stopLoading } = useLoading()
 
   const handleChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value }); //อัพเดท state โดยให้โคลน state เดิมแล้วอัพเดทตาม key
@@ -22,16 +26,24 @@ export default function RegisterForm() {
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();
-      console.log(input);
       const result = validateRegister(input);
       if (result) {
         setError(result);
       } else {
-        console.log('no error');
         setError({});
+        startLoading();
         await authApi.register(input);
+        stopLoading();
+        setInput(initialInput);
+        onClose();
+        toast.success('success register. please log in to continue.');
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data.message);
+    } finally {
+      stopLoading();
+    }
   };
 
   return (

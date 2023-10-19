@@ -16,7 +16,7 @@ export default function RegisterContainer() {
         </button>
       </div>
       <Modal open={open} onClose={() => setOpen(false)} title="Sign Up">
-        <RegisterForm />
+        <RegisterForm onClose={() => setOpen(false)}/>
       </Modal>
     </>
   );
