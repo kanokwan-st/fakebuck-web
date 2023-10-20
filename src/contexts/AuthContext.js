@@ -1,7 +1,12 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import jwtDecode from 'jwt-decode';
 
 import * as authApi from "../apis/auth-api";
-import { getAccessToken, removeAcessToken, setAccessToken } from "../utils/local-storage";
+import {
+  getAccessToken,
+  removeAccessToken,
+  setAccessToken,
+} from "../utils/local-storage";
 
 export const AuthContext = createContext();
 
@@ -10,18 +15,32 @@ export default function AuthContextProvider({ children }) {
     getAccessToken() ? true : null
   ); //state เก็บข้อมูลผู้ใช้งานที่มีการ login อยู่
 
+  useEffect(() => {
+    const fetchAuthUser = async () => {
+      try {
+        const res = await authApi.getMe();
+        setAuthenticatedUser(res.data.user); //เอา response มา update state
+      } catch (err) {
+        removeAccessToken();
+      }
+    };
+    fetchAuthUser();
+  }, []);
+
   const login = async (emailOrMobile, password) => {
     const res = await authApi.login({ emailOrMobile, password });
     setAccessToken(res.data.accessToken);
-    setAuthenticatedUser(true);
+    setAuthenticatedUser(jwtDecode(res.data.accessToken)); //decode เอาค่า payload จาก token มาเพื่อใส่ใน state
   };
 
   const logout = () => {
-    removeAcessToken();
+    removeAccessToken();
     setAuthenticatedUser(null);
-  }
+  };
 
   return (
-    <AuthContext.Provider value={{ authenticatedUser, login, logout }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ authenticatedUser, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
