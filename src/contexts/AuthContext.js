@@ -24,7 +24,9 @@ export default function AuthContextProvider({ children }) {
         removeAccessToken();
       }
     };
-    fetchAuthUser();
+    if (getAccessToken()) {
+      fetchAuthUser();
+    }
   }, []);
 
   const login = async (emailOrMobile, password) => {
