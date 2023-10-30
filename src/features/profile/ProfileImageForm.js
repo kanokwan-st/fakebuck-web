@@ -1,15 +1,29 @@
 import useAuth from "../../hooks/useAuth";
 import Avatar from "../../components/Avatar";
 import { useRef, useState } from "react";
+import useLoading from "../../hooks/useLoading";
+import * as userApi from '../../apis/user-api';
 
-export default function ProfileImageForm() {
-  const {
-    authenticatedUser: { profileImage },
-  } = useAuth();
+export default function ProfileImageForm({ onSuccess, updateProfileUser }) {
+  const { authenticatedUser, updateProfile } = useAuth();
+  const { profileImage } = authenticatedUser;
+  const { startLoading, stopLoading } = useLoading();
 
   const [file, setFile] = useState(null);
 
   const inputEl = useRef(); // { current: <input type="file" className="d-none" ref={inputEl}/>}
+
+  const handleClickSave = async () => {
+    startLoading();
+    const formData = new FormData();
+    formData.append("profileImage", file); //ชื่อkey, สิ่งที่อัพเดท
+    const res = await userApi.updateProfile(formData);
+    updateProfile(res.data);
+    updateProfileUser(res.data);
+    stopLoading();
+    setFile(null);
+    onSuccess();
+  };
 
   return (
     <>
@@ -30,7 +44,10 @@ export default function ProfileImageForm() {
         <div>
           {file && (
             <>
-              <button className="btn btn-link text-decoration-none hover-bg-gray-100">
+              <button
+                className="btn btn-link text-decoration-none hover-bg-gray-100"
+                onClick={handleClickSave}
+              >
                 Save
               </button>
               <button

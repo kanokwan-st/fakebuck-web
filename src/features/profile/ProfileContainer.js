@@ -23,6 +23,10 @@ export default function ProfileContainer() {
     fetchProfileUser();
   }, [userId]);
 
+  const updateProfileUser = value => {
+    setProfileUser({ ...profileUser, ...value });
+  }
+
   return (
     <div
       className="shadow-sm pb-2"
@@ -33,6 +37,9 @@ export default function ProfileContainer() {
         profileUser={profileUser}
         profileFriends={profileFriend}
         statusWithAuthUser={statusWithAuthUser}
+        updateProfileUser={updateProfileUser}
+        setProfileFriends={setProfileFriends}
+        setStatusWithAuthUser={setStatusWithAuthUser}
       />
     </div>
   );
