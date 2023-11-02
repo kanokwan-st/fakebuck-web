@@ -11,7 +11,7 @@ export default function ProfileImageForm({ onSuccess, updateProfileUser }) {
 
   const [file, setFile] = useState(null);
 
-  const inputEl = useRef(); // { current: <input type="file" className="d-none" ref={inputEl}/>}
+  const inputEl = useRef(); // เพื่อให้ได้ inputEl = { current: <input type="file" className="d-none" ref={inputEl}/>} และสามารถเรียกใช้ input โดย inputEl.current
 
   const handleClickSave = async () => {
     startLoading();
@@ -32,9 +32,8 @@ export default function ProfileImageForm({ onSuccess, updateProfileUser }) {
         <input
           type="file"
           className="d-none"
-          ref={inputEl}
+          ref={inputEl} //เอา ref มาใส่เพื่อใช้เรียก input
           onChange={(e) => {
-            // console.dir(e.target);
             // ถ้ากด cancel ไม่ต้องอัพเดท state
             if (e.target.files[0]) {
               setFile(e.target.files[0]);
@@ -42,6 +41,7 @@ export default function ProfileImageForm({ onSuccess, updateProfileUser }) {
           }}
         />
         <div>
+          {/*ถ้า state file มีค่าให้ show ปุ่ม save และ cancel */}
           {file && (
             <>
               <button
@@ -54,7 +54,7 @@ export default function ProfileImageForm({ onSuccess, updateProfileUser }) {
                 className="btn btn-link text-decoration-none hover-bg-gray-100"
                 onClick={() => {
                   setFile(null);
-                  inputEl.current.value = null; //เพื่อ reset ค่า e
+                  inputEl.current.value = null; //เพื่อ reset ค่า e (เวลากดเลือกคนนึงแล้วกดcancel แล้วกดคนเดิมซ้ำจะได้กดได้ เพราะ เกิด onChange ที่ input)
                 }}
               >
                 Cancel
@@ -64,14 +64,15 @@ export default function ProfileImageForm({ onSuccess, updateProfileUser }) {
           {/*ถ้า state file ไม่มีค่าให้ show แค่ปุ่ม edit */}
           <button
             className="btn btn-link text-decoration-none hover-bg-gray-100"
-            onClick={() => inputEl.current.click()} //คลิกให้เปิด element นี้
+            onClick={() => inputEl.current.click()} //เมื่อคลิก button edit ให้เปิด element input
           >
             Edit
           </button>
         </div>
       </div>
       <div className="text-center mt-3">
-        <span onClick={() => inputEl.current.click()}>
+        {/*เมื่อคลิก Avatar ให้เปิด element input*/}
+        <span onClick={() => inputEl.current.click()}> 
           <Avatar
             src={file ? URL.createObjectURL(file) : profileImage}
             size="168"
