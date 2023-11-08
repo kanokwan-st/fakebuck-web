@@ -16,9 +16,9 @@ export default function Post({ post, setPosts }) {
         )}
       </div>
       <PostContent post={post} />
-      <PostResponse />
+      <PostResponse post={post} />
       <hr className="hr-sm my-0" />
-      <PostAction />
+      <PostAction post={post} setPosts={setPosts} />
     </div>
   );
 }

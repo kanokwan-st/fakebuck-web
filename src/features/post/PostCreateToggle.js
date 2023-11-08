@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Avatar from "../../components/Avatar";
 import Modal from "../../components/Modal";
-import { useState } from "react";
+import { useState, memo } from "react";
 import PostForm from "./PostForm";
 
-export default function PostCreateToggle() {
+function PostCreateToggle({ createPost }) {
   const {
     authenticatedUser: { id, profileImage, firstName },
   } = useAuth();
@@ -31,3 +31,5 @@ export default function PostCreateToggle() {
     </div>
   );
 }
+
+export default memo(PostCreateToggle);
