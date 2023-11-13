@@ -6,6 +6,8 @@ import ProfilePage from "../pages/ProfilePage";
 import RedirectIfAuthenticate from "../features/auth/RedirectIfAuthenticate";
 import ProtectedRoute from "../features/auth/ProtectedRoute";
 import AuthLayout from "../layouts/AuthLayout";
+import FriendSuggestPage from "../pages/FriendSuggestPage";
+import AllFriendPage from "../pages/AllFriendPage";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: "/friend",
         element: <FriendPage />,
+      },
+      {
+        path: "/friend/suggestion",
+        element: <FriendSuggestPage />
+      },
+      {
+        path: "/friend/allfriend",
+        element: <AllFriendPage />
       },
       {
         path: "/profile/:userId",

@@ -1,7 +1,7 @@
 import Comment from "./Comment.js";
 
 export default function CommentList({post: { Comments }}) {
-    console.log(Comments)
+    // console.log(Comments)
     return (
         <div>
             {Comments.map((el) => (

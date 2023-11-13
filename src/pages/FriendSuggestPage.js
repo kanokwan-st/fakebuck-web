@@ -1,6 +1,6 @@
 import FriendContainer from "../features/friend/FriendContainer";
 
-export default function FriendPage() {
+export default function FriendSuggestPage() {
   return (
     <div>
       <FriendContainer />
