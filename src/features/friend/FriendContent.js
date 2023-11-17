@@ -2,11 +2,8 @@ import { useLocation } from "react-router-dom";
 import FriendRequest from "./FriendRequest";
 import FriendSuggestion from "./FriendSuggestion";
 import AllFriend from "./AllFriend";
-import { useEffect, useState } from "react";
-import * as friendApi from "../../apis/friend-api";
 
 export default function FriendContent() {
-  const [friends, setFriends] = useState([]);
   const location = useLocation().pathname;
   //   console.log(location);
 
@@ -19,18 +16,6 @@ export default function FriendContent() {
       return <AllFriend />;
     }
   };
-
-  useEffect(() => {
-    const fetchPage = async () => {
-      const res = await friendApi.getFriendRequestData();
-      // console.log(res)
-      // console.log(res.data.requestData)
-      setFriends(res.data.requestData);
-    };
-    fetchPage();
-    console.log(friends);
-  }, []);
-  
 
   return (
     <div
