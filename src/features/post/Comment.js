@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 
-export default function Comment({ comment: { User, title } }) {
+export default function Comment({ comment: { User, title }, comment }) {
   const { id, profileImage, firstName, lastName } = User;
   // console.log(comment);
 

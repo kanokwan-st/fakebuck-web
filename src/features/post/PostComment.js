@@ -5,7 +5,7 @@ import * as postApi from "../../apis/post-api";
 import { useEffect, useRef, useState } from "react";
 import useLoading from "../../hooks/useLoading";
 
-export default function PostComment({ post, clickComment, setClickComment }) {
+export default function PostComment({ post, clickComment, setClickComment, setPosts}) {
   // console.log(post)
   //   const profileImage = Comments[0]?.User.profileImage;
   const [comment, setComment] = useState("");
@@ -16,14 +16,22 @@ export default function PostComment({ post, clickComment, setClickComment }) {
     authenticatedUser: { profileImage, id },
   } = useAuth();
 
-  const handleSend = async (e) => {
+  const handleSend = async () => {
     startLoading();
-    console.log(comment);
     const data = {
       title: comment,
     };
-    await postApi.createComment(post.id, data);
+    const res = await postApi.createComment(post.id, data);
+    // console.log(res)
     setComment("");
+
+    setPosts((previousPosts) => {
+      const deepClone = structuredClone(previousPosts);
+      // console.log(deepClone)
+      const idx = deepClone.findIndex((el) => el.id === post.id);
+      deepClone[idx].Comments.push(res.data.comment);
+      return deepClone;
+    });
     stopLoading();
   };
 

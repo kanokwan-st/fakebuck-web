@@ -57,6 +57,7 @@ export default function PostAction({ post: { Likes, id }, setPosts, post }) {
           post={post}
           clickComment={clickComment}
           setClickComment={setClickComment}
+          setPosts={setPosts}
         />
       </div>
     </>

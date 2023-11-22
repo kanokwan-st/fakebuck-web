@@ -5,7 +5,7 @@ import Modal from "../../components/Modal";
 import { useState, memo } from "react";
 import PostForm from "./PostForm";
 
-function PostCreateToggle({ createPost }) {
+function PostCreateToggle({ createPost, setPosts }) {
   const {
     authenticatedUser: { id, profileImage, firstName },
   } = useAuth();
@@ -26,7 +26,7 @@ function PostCreateToggle({ createPost }) {
         </button>
       </div>
       <Modal open={open} onClose={() => setOpen(false)} title="Create Post">
-        <PostForm onSuccess={() => setOpen(false)} />
+        <PostForm onSuccess={() => setOpen(false)} setPosts={setPosts} />
       </Modal>
     </div>
   );

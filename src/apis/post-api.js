@@ -9,3 +9,6 @@ export const createLike = (postId) => axios.post(`/posts/${postId}/likes`);
 
 export const createComment = (postId, input) =>
   axios.post(`/posts/${postId}/comments`, input);
+
+// export const editPostById = (postId, input) =>
+//   axios.patch(`/posts/${postId}`, input);

@@ -5,7 +5,7 @@ import * as postApi from "../../apis/post-api";
 
 export default function PostContainer() {
   const [posts, setPosts] = useState([]);
-  const [searchTitle, setSearchTitle] = useState("");
+  // const [searchTitle, setSearchTitle] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -15,23 +15,24 @@ export default function PostContainer() {
     fetchPost();
   }, []);
 
-  // const createPost = (newPost) => {
-  //   setPosts([newPost, ...posts]);
-  // };
-
-  const filteredPost = useMemo(
-    () => posts.filter((el) => el.title?.includes(searchTitle)),
-    [searchTitle, posts]
-  );
+  // const filteredPost = useMemo(
+  //   () => posts.filter((el) => el.title?.includes(searchTitle)),
+  //   [searchTitle, posts]
+  // ); //ถ้าค่าใน dependency array เปลี่ยน จะ rerender
 
   const createPost = useCallback((newPost) => {
     // setPosts([newPost, ...posts])
-  }, []);
+    setPosts((previousPosts) => {
+      const deepClone = structuredClone(previousPosts);
+      const updatedPosts = [newPost].concat(deepClone);
+      return updatedPosts;
+    });
+  }, [posts, setPosts]);
 
   return (
     <div className="mx-auto py-4 max-w-152">
       <div className="mx-2 d-flex flex-column gap-3">
-        <PostCreateToggle createPost={createPost} />
+        <PostCreateToggle createPost={createPost} setPosts={setPosts} />
         <PostList posts={posts} setPosts={setPosts} />
       </div>
     </div>

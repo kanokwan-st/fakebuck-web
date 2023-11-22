@@ -1,31 +1,37 @@
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import useLoading from '../../hooks/useLoading';
+import useLoading from "../../hooks/useLoading";
 import useClickFileInput from "../../hooks/useClickFileInput";
-import * as postApi from '../../apis/post-api';
+import * as postApi from "../../apis/post-api";
 
-export default function PostForm({ onSuccess }) {
+export default function PostForm({ onSuccess, setPosts }) {
   const [title, setTitle] = useState(""); //เก็บ state ของ textarea
   const { startLoading, stopLoading } = useLoading();
 
-  const { file, ref, openFileInput, onChangeFileInput, onCancel } = useClickFileInput(); //state ของ file รูปภาพ
+  const { file, ref, openFileInput, onChangeFileInput, onCancel } =
+    useClickFileInput(); //state ของ file รูปภาพ
 
   const {
     authenticatedUser: { firstName },
   } = useAuth();
 
-  const handleSubmitForm = async e => {
+  const handleSubmitForm = async (e) => {
     startLoading();
     e.preventDefault();
-    const formData = new FormData() // ส่งข้อมูลในรูปแบบ FormData
+    const formData = new FormData(); // ส่งข้อมูลในรูปแบบ FormData
     if (title) {
-      formData.append('title', title);
+      formData.append("title", title);
     }
     if (file) {
-      formData.append('postImage', file);
+      formData.append("postImage", file);
     }
     await postApi.createPost(formData);
-    setTitle('');
+
+    const newPostList = await postApi.getAllPostIncFriend();
+    // console.log(newPostList)
+    setPosts(newPostList.data.posts);
+
+    setTitle("");
     onCancel();
     onSuccess();
     stopLoading();
